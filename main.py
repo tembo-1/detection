@@ -7,7 +7,7 @@ with open("freqsy.txt", "wt", encoding="utf-8") as file:
         file.writelines(f"{index} {key}\n")
 
 # todo:
-#  Передавать название файла параметром (`argparse`) или из конфигурации (`configparser`, `tomllib`, etc.)
-#  Записать в  excel
-#  Взять 200 записей
-#  Создать БД
+#  ? Передавать название файла параметром (`argparse`) или из конфигурации (`configparser`, `tomllib`, etc.)
+#  + Записать в  excel
+#  + Взять 200 записей
+#  + Создать БД

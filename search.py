@@ -30,6 +30,7 @@ class Search:
 
     def __init__(self, excel_path: str, json_path: str | PathLike[str]) -> None:
         self.json_path: Path = Path(json_path)
+        self.excel_path: Path = Path(excel_path)
         self.excel: Workbook = openpyxl.load_workbook(excel_path)
 
         self.data: dict[str, dict[str, Any]] = {}
@@ -60,6 +61,15 @@ class Search:
 
     def search(self):
         sheet: Worksheet = self.excel.active
+
+        header = sheet['H1'] 
+        header.value = 'Frequency'
+
+        header = sheet['I1'] 
+        header.value = 'Intensity'
+
+        header = sheet['J1'] 
+        header.value = 'Substance'
 
         accord = []
 
@@ -127,5 +137,23 @@ class Search:
                     min_tag = tag
             if min_tag is not None and min_freq is not None:
                 accord.append({self.data[min_tag]['name']: (min_freq['frequency'], min_freq['intensity'])})
+
+        for index, key in enumerate(accord, start=2):
+            for key, value in key.items():
+                cell = sheet['J'+ str(index)]
+                cell.value = key
+                
+                cell = sheet['H'+ str(index)]
+                cell.value = value[0]
+
+                cell = sheet['I'+ str(index)]
+                cell.value = value[1]
+        
+        self.excel.save(self.excel_path)
+
+        # Запись данных в json
+        with open('data.json', 'w') as file:
+            json.dump(accord, file)
+
 
         return accord
